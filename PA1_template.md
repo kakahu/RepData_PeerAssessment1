@@ -2,7 +2,8 @@
 
 ## Loading and preprocessing the data
 Here read all of the entries of time interval and put them into different groups according to their dates.
-```{r}
+
+```r
 data <- read.csv("activity.csv", colClasses = "character")
 nData <- nrow(data)
 dates <- unique(data$date)
@@ -20,23 +21,38 @@ for (i in 1:nDates){
 ```
 ## What is mean total number of steps taken per day?
 The histogram of the total number of steps taken each day is shown below.
-```{r}
+
+```r
 plot(1:61, nSteps, "h", xaxt="n", xlab="", ylab="")
 axis(1, at=1:61, label=dates)
 title(main="Histogram of the Total Number of Steps Taken Each Day", ylab="Number of Steps", xlab="Day") 
 ```
 
+![plot of chunk unnamed-chunk-2](figure/unnamed-chunk-2.png) 
+
 The mean and median total number of steps taken per day are shown below. The mean value is 9354 and the median value is 10395.
-```{r}
+
+```r
 meanStep <- mean(nSteps)
 print(meanStep)
+```
+
+```
+## [1] 9354
+```
+
+```r
 medianStep <- median(nSteps)
 print(medianStep)
+```
 
+```
+## [1] 10395
 ```
 ## What is the average daily activity pattern?
 Calculate the average steps in each time interval across all days.
-```{r}
+
+```r
 averageSteps <- NULL
 nValid <- NULL
 
@@ -65,8 +81,11 @@ axis(1, at=1:288, label=5*(timeLine-1))
 title(main="Average Daily Activity Pattern", ylab="Steps", xlab="Time Interval")
 ```
 
+![plot of chunk unnamed-chunk-4](figure/unnamed-chunk-4.png) 
+
 Find which 5-minute interval contains the maximum number of steps.
-```{r}
+
+```r
 maxNum <- 0
 maxId <- 0
 for (i in timeLine){
@@ -77,11 +96,16 @@ for (i in timeLine){
 }
 print(maxId)
 ```
+
+```
+## [1] 168
+```
 The 5-minute interval which contains the maximum number of steps is the 168th interval(i.e. interval 835~840).
 
 ## Imputing missing values
 Calculate and report the total number of missing values in the dataset.
-```{r}
+
+```r
 nMissing <- 0
 for (i in 1:nData){
     if (is.na(data$steps[i])){
@@ -90,10 +114,15 @@ for (i in 1:nData){
 }
 print(nMissing)
 ```
+
+```
+## [1] 2304
+```
 The number of missing values is 2304.
 
 As for the strategy for filling in all of the missing values in the dataset, we use the mean for that 5-minute interval. The new dataset is named "newData".
-```{r}
+
+```r
 newData <- data
 
 for (i in 1:nData){
@@ -118,18 +147,33 @@ axis(1, at=1:61, label=dates)
 title(main="Histogram of the Total Number of Steps Taken Each Day in Filled-in Data", ylab="Number of Steps", xlab="Day") 
 ```
 
+![plot of chunk unnamed-chunk-7](figure/unnamed-chunk-7.png) 
+
 The mean and median total number of steps taken are the same, 10766.189.
-```{r}
+
+```r
 newMeanStep <- mean(newNSteps)
 print(newMeanStep)
+```
+
+```
+## [1] 10766
+```
+
+```r
 newMedianStep <- median(newNSteps)
 print(newMedianStep)
+```
+
+```
+## [1] 10766
 ```
 The values of mean and median total number of steps after imputing missing values are different from that of the former dataset. Both values increase because we assign the mean value of the 5-minute interval which the missing values are in to the missing values.
 
 ## Are there differences in activity patterns between weekdays and weekends?
 Add day to newData.
-```{r}
+
+```r
 for (i in 1:nData){
     if (weekdays(as.Date(newData$date[i])) == "Saturday" || weekdays(as.Date(newData$date[i])) == "Sunday"){
         newData$day[i] <- "Weekend"
@@ -141,8 +185,8 @@ for (i in 1:nData){
 ```
 
 Calculate the avearge values of each 5-minute interval for weekday and weekend.
-```{r}
 
+```r
 averageSteps_1 <- NULL
 nValid_1 <- NULL
 averageSteps_2 <- NULL
@@ -186,10 +230,9 @@ title(main="Average Daily Activity Pattern of Weekdays", ylab="Steps", xlab="Tim
 plot(1:288, averageSteps_2[timeLine], type="l", xaxt="n", xlab="", ylab="")
 axis(1, at=1:288, label=5*(timeLine-1))
 title(main="Average Daily Activity Pattern of Weekends", ylab="Steps", xlab="Time Interval")
-
-
-
 ```
+
+![plot of chunk unnamed-chunk-10](figure/unnamed-chunk-10.png) 
 
 The panel plot containing a time series plot of the 5-minute interval and the average number of steps taken, averaged across all weekday days and weekend days is shown above.
 
